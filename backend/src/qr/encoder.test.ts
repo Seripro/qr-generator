@@ -28,12 +28,29 @@ describe("Version 1-L", () => {
   it("21x21である", () => {
     expect(VERSION_1.size).toBe(21);
   });
+
+  it("Version 1-Lのデータ領域を19 codewordsまで埋める", () => {
+    const result = encodeByteMode("A");
+
+    expect(result.length).toBe(152);
+  });
+
+  it("Pad BytesがECと11で埋められる", () => {
+    const result = encodeByteMode("A");
+
+    const bits = result.toArray();
+
+    // 最後の16bit
+    const last16Bits = bits.slice(-16).join("");
+
+    expect(last16Bits).toBe("11101100" + "00010001");
+  });
 });
 
 describe("encodeByteMode", () => {
   it("Byte Modeのデータを生成できる", () => {
     const result = encodeByteMode("A");
 
-    expect(result.length).toBe(24);
+    expect(result.length).toBe(152);
   });
 });

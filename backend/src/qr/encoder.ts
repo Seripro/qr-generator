@@ -34,12 +34,28 @@ export function encodeByteMode(text: string): BitBuffer {
   buffer.appendBits(0, terminatorLength);
 
   // 8bit境界まで0で埋める
+  // 8bit境界まで0で埋める
   const alignmentBits = Math.min(
     (8 - (buffer.length % 8)) % 8,
     capacityBits - buffer.length,
   );
 
   buffer.appendBits(0, alignmentBits);
+
+  // Pad Bytes
+  const padBytes = [0xec, 0x11];
+  let padIndex = 0;
+
+  while (buffer.length < capacityBits) {
+    const remainingBits = capacityBits - buffer.length;
+
+    if (remainingBits < 8) {
+      throw new Error("Unexpected remaining bits");
+    }
+
+    buffer.appendBits(padBytes[padIndex], 8);
+    padIndex = (padIndex + 1) % padBytes.length;
+  }
 
   return buffer;
 }
