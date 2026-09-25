@@ -59,4 +59,18 @@ export class QrMatrix {
       }
     }
   }
+
+  placeTimingPatterns(): void {
+    for (let i = 8; i < this.size - 8; i++) {
+      const value = i % 2 === 0;
+
+      if (this.get(6, i) === null) {
+        this.set(6, i, value);
+      }
+
+      if (this.get(i, 6) === null) {
+        this.set(i, 6, value);
+      }
+    }
+  }
 }

@@ -60,4 +60,26 @@ describe("QrMatrix", () => {
     expect(matrix.get(0, 7)).toBe(false);
     expect(matrix.get(7, 0)).toBe(false);
   });
+
+  it("Timing Patternを配置できる", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.placeFinderPattern(0, 0);
+    matrix.placeFinderPattern(0, 14);
+    matrix.placeFinderPattern(14, 0);
+
+    matrix.placeSeparator(0, 0);
+    matrix.placeSeparator(0, 14);
+    matrix.placeSeparator(14, 0);
+
+    matrix.placeTimingPatterns();
+
+    expect(matrix.get(6, 8)).toBe(true);
+    expect(matrix.get(6, 9)).toBe(false);
+    expect(matrix.get(6, 10)).toBe(true);
+
+    expect(matrix.get(8, 6)).toBe(true);
+    expect(matrix.get(9, 6)).toBe(false);
+    expect(matrix.get(10, 6)).toBe(true);
+  });
 });
