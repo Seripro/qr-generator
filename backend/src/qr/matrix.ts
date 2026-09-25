@@ -37,4 +37,26 @@ export class QrMatrix {
       }
     }
   }
+
+  placeSeparator(row: number, column: number): void {
+    for (let r = -1; r <= 7; r++) {
+      for (let c = -1; c <= 7; c++) {
+        const targetRow = row + r;
+        const targetColumn = column + c;
+
+        if (
+          targetRow < 0 ||
+          targetRow >= this.size ||
+          targetColumn < 0 ||
+          targetColumn >= this.size
+        ) {
+          continue;
+        }
+
+        if (r === -1 || r === 7 || c === -1 || c === 7) {
+          this.set(targetRow, targetColumn, false);
+        }
+      }
+    }
+  }
 }

@@ -49,4 +49,15 @@ describe("QrMatrix", () => {
     expect(matrix.get(0, 20)).toBe(true);
     expect(matrix.get(20, 0)).toBe(true);
   });
+
+  it("Finder Patternの外側にSeparatorを配置できる", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.placeFinderPattern(0, 0);
+    matrix.placeSeparator(0, 0);
+
+    expect(matrix.get(0, 0)).toBe(true);
+    expect(matrix.get(0, 7)).toBe(false);
+    expect(matrix.get(7, 0)).toBe(false);
+  });
 });
