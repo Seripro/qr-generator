@@ -19,4 +19,22 @@ export class QrMatrix {
   set(row: number, column: number, value: boolean): void {
     this.modules[row][column] = value;
   }
+
+  placeFinderPattern(row: number, column: number): void {
+    const pattern = [
+      [true, true, true, true, true, true, true],
+      [true, false, false, false, false, false, true],
+      [true, false, true, true, true, false, true],
+      [true, false, true, true, true, false, true],
+      [true, false, true, true, true, false, true],
+      [true, false, false, false, false, false, true],
+      [true, true, true, true, true, true, true],
+    ];
+
+    for (let r = 0; r < 7; r++) {
+      for (let c = 0; c < 7; c++) {
+        this.set(row + r, column + c, pattern[r][c]);
+      }
+    }
+  }
 }

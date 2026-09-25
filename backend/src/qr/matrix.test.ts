@@ -25,4 +25,28 @@ describe("QrMatrix", () => {
 
     expect(matrix.get(5, 10)).toBe(true);
   });
+
+  it("Finder Patternを配置できる", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.placeFinderPattern(0, 0);
+
+    expect(matrix.get(0, 0)).toBe(true);
+    expect(matrix.get(0, 1)).toBe(true);
+    expect(matrix.get(1, 1)).toBe(false);
+    expect(matrix.get(2, 2)).toBe(true);
+    expect(matrix.get(6, 6)).toBe(true);
+  });
+
+  it("3つのFinder Patternを配置できる", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.placeFinderPattern(0, 0);
+    matrix.placeFinderPattern(0, 14);
+    matrix.placeFinderPattern(14, 0);
+
+    expect(matrix.get(0, 0)).toBe(true);
+    expect(matrix.get(0, 20)).toBe(true);
+    expect(matrix.get(20, 0)).toBe(true);
+  });
 });
