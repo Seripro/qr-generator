@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { QrMatrix } from "./matrix.js";
 import {
+  calculateMaskPenalty,
   calculatePenaltyN1,
   calculatePenaltyN2,
   calculatePenaltyN3,
@@ -276,4 +277,22 @@ describe("Mask Penalty N4", () => {
 
     expect(calculatePenaltyN4(matrix)).toBe(20);
   });
+});
+
+it("N1〜N4の合計を計算できる", () => {
+  const matrix = new QrMatrix(10);
+
+  for (let row = 0; row < 10; row++) {
+    for (let column = 0; column < 10; column++) {
+      matrix.set(row, column, false);
+    }
+  }
+
+  const expected =
+    calculatePenaltyN1(matrix) +
+    calculatePenaltyN2(matrix) +
+    calculatePenaltyN3(matrix) +
+    calculatePenaltyN4(matrix);
+
+  expect(calculateMaskPenalty(matrix)).toBe(expected);
 });

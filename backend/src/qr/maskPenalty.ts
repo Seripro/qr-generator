@@ -190,3 +190,12 @@ export function calculatePenaltyN4(matrix: QrMatrix): number {
 
   return deviation * 10;
 }
+
+export function calculateMaskPenalty(matrix: QrMatrix): number {
+  return (
+    calculatePenaltyN1(matrix) +
+    calculatePenaltyN2(matrix) +
+    calculatePenaltyN3(matrix) +
+    calculatePenaltyN4(matrix)
+  );
+}
