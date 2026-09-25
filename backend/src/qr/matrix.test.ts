@@ -96,10 +96,23 @@ describe("QrMatrix", () => {
 
     matrix.reserveFormatInformation();
 
-    expect(matrix.isReserved(8, 0)).toBe(true);
-    expect(matrix.isReserved(8, 8)).toBe(true);
     expect(matrix.isReserved(0, 8)).toBe(true);
-    expect(matrix.isReserved(20, 8)).toBe(true);
+    expect(matrix.isReserved(5, 8)).toBe(true);
+    expect(matrix.isReserved(7, 8)).toBe(true);
+    expect(matrix.isReserved(8, 8)).toBe(true);
+    expect(matrix.isReserved(8, 7)).toBe(true);
+    expect(matrix.isReserved(8, 0)).toBe(true);
+    expect(matrix.isReserved(8, 5)).toBe(true);
+
+    expect(matrix.isReserved(8, 13)).toBe(true);
     expect(matrix.isReserved(8, 20)).toBe(true);
+
+    expect(matrix.isReserved(14, 8)).toBe(true);
+    expect(matrix.isReserved(20, 8)).toBe(true);
+
+    // Timing Patternの位置はFormat Informationではない
+    expect(matrix.isReserved(6, 8)).toBe(false);
+    expect(matrix.isReserved(8, 6)).toBe(false);
+    expect(matrix.isReserved(13, 8)).toBe(false);
   });
 });

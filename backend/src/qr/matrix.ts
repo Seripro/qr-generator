@@ -93,24 +93,28 @@ export class QrMatrix {
   }
 
   reserveFormatInformation(): void {
-    // 横方向
-    for (let i = 0; i < 9; i++) {
-      this.reserve(8, i);
+    // 左上：縦
+    for (let row = 0; row <= 5; row++) {
+      this.reserve(row, 8);
     }
 
-    // 縦方向
-    for (let i = 0; i < 9; i++) {
-      this.reserve(i, 8);
+    this.reserve(7, 8);
+    this.reserve(8, 8);
+    this.reserve(8, 7);
+
+    // 左上：横
+    for (let column = 0; column <= 5; column++) {
+      this.reserve(8, column);
     }
 
     // 右上
-    for (let i = 0; i < 8; i++) {
-      this.reserve(8, this.size - 1 - i);
+    for (let column = 13; column <= 20; column++) {
+      this.reserve(8, column);
     }
 
     // 左下
-    for (let i = 0; i < 7; i++) {
-      this.reserve(this.size - 1 - i, 8);
+    for (let row = 14; row <= 20; row++) {
+      this.reserve(row, 8);
     }
   }
 }
