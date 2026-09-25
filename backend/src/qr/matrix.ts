@@ -198,4 +198,26 @@ export class QrMatrix {
 
     return coordinates;
   }
+
+  placeData(codewords: Uint8Array): void {
+    const coordinates = this.getDataCoordinates();
+
+    const bits: boolean[] = [];
+
+    for (const byte of codewords) {
+      for (let i = 7; i >= 0; i--) {
+        bits.push(((byte >>> i) & 1) === 1);
+      }
+    }
+
+    if (bits.length > coordinates.length) {
+      throw new Error("Data does not fit in matrix");
+    }
+
+    for (let i = 0; i < bits.length; i++) {
+      const [row, column] = coordinates[i];
+
+      this.placeDataBit(row, column, bits[i]);
+    }
+  }
 }

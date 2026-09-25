@@ -195,4 +195,28 @@ describe("QrMatrix", () => {
       ),
     ).toBe(false);
   });
+
+  it("CodewordをMatrixに配置できる", () => {
+    const matrix = new QrMatrix(21);
+
+    const coordinates = matrix.getDataCoordinates();
+
+    matrix.placeData(new Uint8Array([0x80]));
+
+    expect(matrix.get(...coordinates[0])).toBe(true);
+
+    for (let i = 1; i < 8; i++) {
+      expect(matrix.get(...coordinates[i])).toBe(false);
+    }
+  });
+
+  it("Matrixに収まらないデータはエラーになる", () => {
+    const matrix = new QrMatrix(21);
+
+    const codewords = new Uint8Array(100);
+
+    expect(() => {
+      matrix.placeData(codewords);
+    }).toThrow("Data does not fit in matrix");
+  });
 });
