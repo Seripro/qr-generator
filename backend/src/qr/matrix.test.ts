@@ -115,4 +115,23 @@ describe("QrMatrix", () => {
     expect(matrix.isReserved(8, 6)).toBe(false);
     expect(matrix.isReserved(13, 8)).toBe(false);
   });
+
+  it("Format InformationをMatrixに配置できる", () => {
+    const matrix = new QrMatrix(21);
+
+    const formatInfo = 0x77c4;
+
+    matrix.placeFormatInformation(formatInfo);
+
+    expect(matrix.get(0, 8)).toBe(false);
+    expect(matrix.get(1, 8)).toBe(false);
+    expect(matrix.get(7, 8)).toBe(true);
+    expect(matrix.get(8, 8)).toBe(true);
+
+    expect(matrix.get(8, 20)).toBe(false);
+    expect(matrix.get(8, 13)).toBe(true);
+
+    expect(matrix.get(14, 8)).toBe(true);
+    expect(matrix.get(20, 8)).toBe(true);
+  });
 });

@@ -117,4 +117,30 @@ export class QrMatrix {
       this.reserve(row, 8);
     }
   }
+
+  placeFormatInformation(formatInfo: number): void {
+    // 左上：縦方向
+    for (let i = 0; i <= 5; i++) {
+      this.set(i, 8, ((formatInfo >>> i) & 1) === 1);
+    }
+
+    this.set(7, 8, ((formatInfo >>> 6) & 1) === 1);
+    this.set(8, 8, ((formatInfo >>> 7) & 1) === 1);
+    this.set(8, 7, ((formatInfo >>> 8) & 1) === 1);
+
+    // 左上：横方向
+    for (let i = 9; i <= 14; i++) {
+      this.set(8, 14 - i, ((formatInfo >>> i) & 1) === 1);
+    }
+
+    // 右上
+    for (let i = 0; i <= 7; i++) {
+      this.set(8, this.size - 1 - i, ((formatInfo >>> i) & 1) === 1);
+    }
+
+    // 左下
+    for (let i = 8; i <= 14; i++) {
+      this.set(this.size - 15 + i, 8, ((formatInfo >>> i) & 1) === 1);
+    }
+  }
 }
