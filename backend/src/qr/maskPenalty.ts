@@ -75,3 +75,27 @@ export function calculatePenaltyN1(matrix: QrMatrix): number {
 
   return penalty;
 }
+
+export function calculatePenaltyN2(matrix: QrMatrix): number {
+  let penalty = 0;
+
+  for (let row = 0; row < matrix.size - 1; row++) {
+    for (let column = 0; column < matrix.size - 1; column++) {
+      const topLeft = matrix.get(row, column);
+      const topRight = matrix.get(row, column + 1);
+      const bottomLeft = matrix.get(row + 1, column);
+      const bottomRight = matrix.get(row + 1, column + 1);
+
+      if (
+        topLeft !== null &&
+        topLeft === topRight &&
+        topLeft === bottomLeft &&
+        topLeft === bottomRight
+      ) {
+        penalty += 3;
+      }
+    }
+  }
+
+  return penalty;
+}
