@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { encodeUtf8 } from "./encoder.js";
+import { encodeByteMode, encodeUtf8 } from "./encoder.js";
 
 describe("encodeUtf8", () => {
   it("ASCII文字列をUTF-8に変換できる", () => {
@@ -18,5 +18,13 @@ describe("encodeUtf8", () => {
     const result = encodeUtf8("");
 
     expect(result.length).toBe(0);
+  });
+});
+
+describe("encodeByteMode", () => {
+  it("Byte Modeのビット列を作れる", () => {
+    const result = encodeByteMode("A");
+
+    expect(result.toString()).toBe("0100" + "00000001" + "01000001" + "0000");
   });
 });
