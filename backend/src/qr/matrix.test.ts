@@ -82,4 +82,12 @@ describe("QrMatrix", () => {
     expect(matrix.get(9, 6)).toBe(false);
     expect(matrix.get(10, 6)).toBe(true);
   });
+
+  it("Dark Moduleを配置できる", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.placeDarkModule();
+
+    expect(matrix.get(13, 8)).toBe(true);
+  });
 });

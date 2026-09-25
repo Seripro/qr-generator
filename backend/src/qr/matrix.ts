@@ -73,4 +73,8 @@ export class QrMatrix {
       }
     }
   }
+
+  placeDarkModule(): void {
+    this.set(13, 8, true);
+  }
 }
