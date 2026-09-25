@@ -19,4 +19,10 @@ export class Polynomial {
 
     return new Polynomial(result);
   }
+
+  scale(factor: number): Polynomial {
+    return new Polynomial(
+      this.coefficients.map((coefficient) => multiply(coefficient, factor)),
+    );
+  }
 }
