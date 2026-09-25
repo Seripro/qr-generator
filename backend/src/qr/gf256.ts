@@ -37,3 +37,7 @@ export function multiply(a: number, b: number): number {
 
   return EXP_TABLE[logA + logB];
 }
+
+export function exp(power: number): number {
+  return EXP_TABLE[power];
+}
