@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { encodeByteMode, encodeDataCodewords, encodeUtf8 } from "./encoder.js";
+import {
+  encodeByteMode,
+  encodeCodewords,
+  encodeDataCodewords,
+  encodeUtf8,
+} from "./encoder.js";
 import { VERSION_1 } from "./version.js";
 
 describe("encodeUtf8", () => {
@@ -70,5 +75,21 @@ describe("encodeDataCodewords", () => {
     expect(result[2]).toBe(0x10);
     expect(result[3]).toBe(0xec);
     expect(result[4]).toBe(0x11);
+  });
+});
+
+describe("encodeCodewords", () => {
+  it("Version 1-Lの26個のCodewordを生成できる", () => {
+    const result = encodeCodewords("A");
+
+    expect(result.length).toBe(26);
+  });
+
+  it("先頭19個がData Codewordsである", () => {
+    const result = encodeCodewords("A");
+
+    const data = encodeDataCodewords("A");
+
+    expect(result.slice(0, 19)).toEqual(data);
   });
 });

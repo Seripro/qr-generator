@@ -1,4 +1,5 @@
 import { BitBuffer } from "./bitBuffer.js";
+import { generateErrorCorrection } from "./reedSolomon.js";
 import { VERSION_1 } from "./version.js";
 
 export function encodeUtf8(text: string): Uint8Array {
@@ -64,4 +65,12 @@ export function encodeDataCodewords(text: string): Uint8Array {
   const buffer = encodeByteMode(text);
 
   return buffer.toBytes();
+}
+
+export function encodeCodewords(text: string): Uint8Array {
+  const dataCodewords = encodeDataCodewords(text);
+
+  const errorCorrectionCodewords = generateErrorCorrection(dataCodewords, 7);
+
+  return new Uint8Array([...dataCodewords, ...errorCorrectionCodewords]);
 }
