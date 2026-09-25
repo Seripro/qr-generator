@@ -219,4 +219,22 @@ describe("QrMatrix", () => {
       matrix.placeData(codewords);
     }).toThrow("Data does not fit in matrix");
   });
+
+  it("データを配置した場所を判定できる", () => {
+    const matrix = new QrMatrix(21);
+
+    expect(matrix.isDataModule(20, 20)).toBe(false);
+
+    matrix.placeDataBit(20, 20, true);
+
+    expect(matrix.isDataModule(20, 20)).toBe(true);
+  });
+
+  it("固定パターンはデータモジュールとして扱わない", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.placeFinderPattern(0, 0);
+
+    expect(matrix.isDataModule(0, 0)).toBe(false);
+  });
 });

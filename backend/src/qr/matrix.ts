@@ -3,6 +3,7 @@ export type Module = boolean | null;
 export class QrMatrix {
   readonly size: number;
   readonly modules: Module[][];
+  private dataModules: boolean[][];
 
   private reserved: boolean[][];
 
@@ -14,6 +15,10 @@ export class QrMatrix {
     );
 
     this.reserved = Array.from({ length: size }, () =>
+      Array<boolean>(size).fill(false),
+    );
+
+    this.dataModules = Array.from({ length: size }, () =>
       Array<boolean>(size).fill(false),
     );
   }
@@ -154,6 +159,7 @@ export class QrMatrix {
     }
 
     this.set(row, column, bit);
+    this.dataModules[row][column] = true;
   }
 
   isAvailableForData(row: number, column: number): boolean {
@@ -219,5 +225,9 @@ export class QrMatrix {
 
       this.placeDataBit(row, column, bits[i]);
     }
+  }
+
+  isDataModule(row: number, column: number): boolean {
+    return this.dataModules[row][column];
   }
 }
