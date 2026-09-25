@@ -90,4 +90,16 @@ describe("QrMatrix", () => {
 
     expect(matrix.get(13, 8)).toBe(true);
   });
+
+  it("Format Informationの領域を予約できる", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.reserveFormatInformation();
+
+    expect(matrix.isReserved(8, 0)).toBe(true);
+    expect(matrix.isReserved(8, 8)).toBe(true);
+    expect(matrix.isReserved(0, 8)).toBe(true);
+    expect(matrix.isReserved(20, 8)).toBe(true);
+    expect(matrix.isReserved(8, 20)).toBe(true);
+  });
 });
