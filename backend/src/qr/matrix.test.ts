@@ -134,4 +134,32 @@ describe("QrMatrix", () => {
     expect(matrix.get(14, 8)).toBe(true);
     expect(matrix.get(20, 8)).toBe(true);
   });
+
+  it("空いている場所にデータビットを配置できる", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.placeDataBit(20, 20, true);
+
+    expect(matrix.get(20, 20)).toBe(true);
+  });
+
+  it("既に使用されている場所にはデータを配置できない", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.set(20, 20, true);
+
+    expect(() => {
+      matrix.placeDataBit(20, 20, false);
+    }).toThrow("Cannot place data on an occupied module");
+  });
+
+  it("予約領域にはデータを配置できない", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.reserveFormatInformation();
+
+    expect(() => {
+      matrix.placeDataBit(0, 8, true);
+    }).toThrow("Cannot place data on a reserved module");
+  });
 });

@@ -143,4 +143,16 @@ export class QrMatrix {
       this.set(this.size - 15 + i, 8, ((formatInfo >>> i) & 1) === 1);
     }
   }
+
+  placeDataBit(row: number, column: number, bit: boolean): void {
+    if (this.get(row, column) !== null) {
+      throw new Error("Cannot place data on an occupied module");
+    }
+
+    if (this.isReserved(row, column)) {
+      throw new Error("Cannot place data on a reserved module");
+    }
+
+    this.set(row, column, bit);
+  }
 }
