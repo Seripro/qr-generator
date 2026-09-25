@@ -14,3 +14,35 @@ export function createGeneratorPolynomial(
 
   return generator;
 }
+
+export function generateErrorCorrection(
+  data: Uint8Array,
+  errorCorrectionCodewords: number,
+): Uint8Array {
+  const generator = createGeneratorPolynomial(errorCorrectionCodewords);
+
+  const message = new Polynomial([
+    ...data,
+    ...new Array(errorCorrectionCodewords).fill(0),
+  ]);
+
+  const remainder = new Polynomial([...message.coefficients]);
+
+  for (let i = 0; i < data.length; i++) {
+    const factor = remainder.coefficients[i];
+
+    if (factor === 0) {
+      continue;
+    }
+
+    const scaledGenerator = generator.scale(factor);
+
+    for (let j = 0; j < scaledGenerator.coefficients.length; j++) {
+      remainder.coefficients[i + j] ^= scaledGenerator.coefficients[j];
+    }
+  }
+
+  return new Uint8Array(
+    remainder.coefficients.slice(-errorCorrectionCodewords),
+  );
+}
