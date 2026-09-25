@@ -59,3 +59,9 @@ export function encodeByteMode(text: string): BitBuffer {
 
   return buffer;
 }
+
+export function encodeDataCodewords(text: string): Uint8Array {
+  const buffer = encodeByteMode(text);
+
+  return buffer.toBytes();
+}
