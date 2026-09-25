@@ -1,4 +1,5 @@
 import { BitBuffer } from "./bitBuffer.js";
+import { VERSION_1 } from "./version.js";
 
 export function encodeUtf8(text: string): Uint8Array {
   return new TextEncoder().encode(text);
@@ -8,10 +9,12 @@ export function encodeByteMode(text: string): BitBuffer {
   const bytes = encodeUtf8(text);
   const buffer = new BitBuffer();
 
-  // Mode Indicator: Byte Mode = 0100
+  const capacityBits = VERSION_1.dataCodewords * 8;
+
+  // Mode Indicator
   buffer.appendBits(0b0100, 4);
 
-  // Character Count: Version 1〜9 / Byte Mode = 8 bits
+  // Character Count
   buffer.appendBits(bytes.length, 8);
 
   // Data
@@ -19,15 +22,24 @@ export function encodeByteMode(text: string): BitBuffer {
     buffer.appendBits(byte, 8);
   }
 
-  // Terminator
-  buffer.appendBits(0, 4);
-
-  // 8bit境界に合わせる
-  const remainder = buffer.length % 8;
-
-  if (remainder !== 0) {
-    buffer.appendBits(0, 8 - remainder);
+  // データが容量を超えている
+  if (buffer.length > capacityBits) {
+    throw new Error("Data too long");
   }
+
+  // Terminator
+  const remainingBits = capacityBits - buffer.length;
+  const terminatorLength = Math.min(4, remainingBits);
+
+  buffer.appendBits(0, terminatorLength);
+
+  // 8bit境界まで0で埋める
+  const alignmentBits = Math.min(
+    (8 - (buffer.length % 8)) % 8,
+    capacityBits - buffer.length,
+  );
+
+  buffer.appendBits(0, alignmentBits);
 
   return buffer;
 }
