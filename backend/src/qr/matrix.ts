@@ -1,3 +1,5 @@
+import { shouldMask } from "./mask.js";
+
 export type Module = boolean | null;
 
 export class QrMatrix {
@@ -229,5 +231,23 @@ export class QrMatrix {
 
   isDataModule(row: number, column: number): boolean {
     return this.dataModules[row][column];
+  }
+
+  applyMask(mask: number): void {
+    for (let row = 0; row < this.size; row++) {
+      for (let column = 0; column < this.size; column++) {
+        if (!this.isDataModule(row, column)) {
+          continue;
+        }
+
+        if (shouldMask(mask, row, column)) {
+          const value = this.get(row, column);
+
+          if (value !== null) {
+            this.set(row, column, !value);
+          }
+        }
+      }
+    }
   }
 }

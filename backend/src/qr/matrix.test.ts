@@ -237,4 +237,25 @@ describe("QrMatrix", () => {
 
     expect(matrix.isDataModule(0, 0)).toBe(false);
   });
+
+  it("データ部分だけにMaskを適用できる", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.placeDataBit(20, 20, true);
+    matrix.placeDataBit(20, 19, true);
+
+    matrix.placeFinderPattern(0, 0);
+
+    matrix.applyMask(0);
+
+    // Mask 0:
+    // (20 + 20) % 2 === 0 → 反転
+    expect(matrix.get(20, 20)).toBe(false);
+
+    // (20 + 19) % 2 !== 0 → そのまま
+    expect(matrix.get(20, 19)).toBe(true);
+
+    // Finder Patternは変更されない
+    expect(matrix.get(0, 0)).toBe(true);
+  });
 });
