@@ -4,6 +4,7 @@ import {
   calculatePenaltyN1,
   calculatePenaltyN2,
   calculatePenaltyN3,
+  calculatePenaltyN4,
 } from "./maskPenalty.js";
 
 describe("Mask Penalty N1", () => {
@@ -227,5 +228,52 @@ describe("Mask Penalty N1", () => {
     }
 
     expect(calculatePenaltyN3(matrix)).toBe(0);
+  });
+});
+
+describe("Mask Penalty N4", () => {
+  it("黒が50%なら0点", () => {
+    const matrix = new QrMatrix(10);
+
+    let count = 0;
+
+    for (let row = 0; row < 10; row++) {
+      for (let column = 0; column < 10; column++) {
+        matrix.set(row, column, count < 50);
+        count++;
+      }
+    }
+
+    expect(calculatePenaltyN4(matrix)).toBe(0);
+  });
+
+  it("黒が60%なら20点", () => {
+    const matrix = new QrMatrix(10);
+
+    let count = 0;
+
+    for (let row = 0; row < 10; row++) {
+      for (let column = 0; column < 10; column++) {
+        matrix.set(row, column, count < 60);
+        count++;
+      }
+    }
+
+    expect(calculatePenaltyN4(matrix)).toBe(20);
+  });
+
+  it("黒が40%なら20点", () => {
+    const matrix = new QrMatrix(10);
+
+    let count = 0;
+
+    for (let row = 0; row < 10; row++) {
+      for (let column = 0; column < 10; column++) {
+        matrix.set(row, column, count < 40);
+        count++;
+      }
+    }
+
+    expect(calculatePenaltyN4(matrix)).toBe(20);
   });
 });
