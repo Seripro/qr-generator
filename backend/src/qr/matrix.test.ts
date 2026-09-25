@@ -162,4 +162,37 @@ describe("QrMatrix", () => {
       matrix.placeDataBit(0, 8, true);
     }).toThrow("Cannot place data on a reserved module");
   });
+
+  it("データ配置用の座標をジグザグ順に取得できる", () => {
+    const matrix = new QrMatrix(21);
+
+    const coordinates = matrix.getDataCoordinates();
+
+    expect(coordinates[0]).toEqual([20, 20]);
+    expect(coordinates[1]).toEqual([20, 19]);
+    expect(coordinates[2]).toEqual([19, 20]);
+    expect(coordinates[3]).toEqual([19, 19]);
+  });
+
+  it("Timing Patternの列6をデータ配置から除外する", () => {
+    const matrix = new QrMatrix(21);
+
+    const coordinates = matrix.getDataCoordinates();
+
+    expect(coordinates.some(([, column]) => column === 6)).toBe(false);
+  });
+
+  it("使用済みのマスにはデータ配置しない", () => {
+    const matrix = new QrMatrix(21);
+
+    matrix.placeFinderPattern(14, 14);
+
+    const coordinates = matrix.getDataCoordinates();
+
+    expect(
+      coordinates.some(
+        ([row, column]) => row >= 14 && row < 21 && column >= 14 && column < 21,
+      ),
+    ).toBe(false);
+  });
 });

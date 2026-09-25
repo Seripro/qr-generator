@@ -155,4 +155,47 @@ export class QrMatrix {
 
     this.set(row, column, bit);
   }
+
+  isAvailableForData(row: number, column: number): boolean {
+    return this.get(row, column) === null && !this.isReserved(row, column);
+  }
+
+  getDataCoordinates(): Array<[number, number]> {
+    const coordinates: Array<[number, number]> = [];
+
+    let upward = true;
+
+    for (let column = this.size - 1; column > 0; column -= 2) {
+      // Timing Patternの列を飛ばす
+      if (column === 6) {
+        column--;
+      }
+
+      if (upward) {
+        for (let row = this.size - 1; row >= 0; row--) {
+          if (this.isAvailableForData(row, column)) {
+            coordinates.push([row, column]);
+          }
+
+          if (this.isAvailableForData(row, column - 1)) {
+            coordinates.push([row, column - 1]);
+          }
+        }
+      } else {
+        for (let row = 0; row < this.size; row++) {
+          if (this.isAvailableForData(row, column)) {
+            coordinates.push([row, column]);
+          }
+
+          if (this.isAvailableForData(row, column - 1)) {
+            coordinates.push([row, column - 1]);
+          }
+        }
+      }
+
+      upward = !upward;
+    }
+
+    return coordinates;
+  }
 }
