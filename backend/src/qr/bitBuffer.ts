@@ -22,4 +22,24 @@ export class BitBuffer {
   toString(): string {
     return this.bits.join("");
   }
+
+  toBytes(): Uint8Array {
+    if (this.bits.length % 8 !== 0) {
+      throw new Error("Bit length must be a multiple of 8");
+    }
+
+    const bytes = new Uint8Array(this.bits.length / 8);
+
+    for (let i = 0; i < bytes.length; i++) {
+      let value = 0;
+
+      for (let j = 0; j < 8; j++) {
+        value = (value << 1) | this.bits[i * 8 + j];
+      }
+
+      bytes[i] = value;
+    }
+
+    return bytes;
+  }
 }

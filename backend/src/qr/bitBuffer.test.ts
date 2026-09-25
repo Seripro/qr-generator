@@ -27,4 +27,13 @@ describe("BitBuffer", () => {
 
     expect(buffer.toArray()).toEqual([0, 1, 0, 0]);
   });
+
+  it("ビット列をバイト列に変換できる", () => {
+    const buffer = new BitBuffer();
+
+    buffer.appendBits(0b01000010, 8);
+    buffer.appendBits(0b11101100, 8);
+
+    expect(buffer.toBytes()).toEqual(new Uint8Array([0x42, 0xec]));
+  });
 });
