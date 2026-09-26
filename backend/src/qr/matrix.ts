@@ -250,4 +250,28 @@ export class QrMatrix {
       }
     }
   }
+
+  clone(): QrMatrix {
+    const cloned = new QrMatrix(this.size);
+
+    for (let row = 0; row < this.size; row++) {
+      for (let column = 0; column < this.size; column++) {
+        const value = this.get(row, column);
+
+        if (value !== null) {
+          cloned.set(row, column, value);
+        }
+
+        if (this.isReserved(row, column)) {
+          cloned.reserve(row, column);
+        }
+
+        if (this.isDataModule(row, column)) {
+          cloned.dataModules[row][column] = true;
+        }
+      }
+    }
+
+    return cloned;
+  }
 }

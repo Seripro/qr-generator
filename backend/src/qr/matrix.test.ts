@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { QrMatrix } from "./matrix.js";
+import { applyMask } from "./mask.js";
 
 describe("QrMatrix", () => {
   it("21×21のマトリクスを作成できる", () => {
@@ -257,5 +258,30 @@ describe("QrMatrix", () => {
 
     // Finder Patternは変更されない
     expect(matrix.get(0, 0)).toBe(true);
+  });
+
+  it("Matrixをコピーできる", () => {
+    const matrix = new QrMatrix(5);
+
+    matrix.set(1, 2, true);
+    matrix.reserve(3, 4);
+
+    const cloned = matrix.clone();
+
+    expect(cloned.get(1, 2)).toBe(true);
+    expect(cloned.isReserved(3, 4)).toBe(true);
+  });
+
+  it("コピーを変更しても元のMatrixは変わらない", () => {
+    const matrix = new QrMatrix(5);
+
+    matrix.set(1, 2, true);
+
+    const cloned = matrix.clone();
+
+    cloned.set(1, 2, false);
+
+    expect(matrix.get(1, 2)).toBe(true);
+    expect(cloned.get(1, 2)).toBe(false);
   });
 });
