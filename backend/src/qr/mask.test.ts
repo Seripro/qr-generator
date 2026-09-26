@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { shouldMask } from "./mask.js";
+import { applyMask, shouldMask } from "./mask.js";
+import { QrMatrix } from "./matrix.js";
 
 describe("Mask Pattern", () => {
   it("Mask 0を判定できる", () => {
@@ -21,5 +22,40 @@ describe("Mask Pattern", () => {
         shouldMask(mask, 10, 10);
       }).not.toThrow();
     }
+  });
+
+  describe("applyMask", () => {
+    it("データモジュールだけをマスクする", () => {
+      const matrix = new QrMatrix(5);
+
+      matrix.placeDataBit(2, 2, true);
+
+      applyMask(matrix, 0);
+
+      expect(matrix.get(2, 2)).toBe(false);
+    });
+
+    it("データモジュール以外にはマスクしない", () => {
+      const matrix = new QrMatrix(5);
+
+      matrix.set(2, 2, true);
+
+      applyMask(matrix, 0);
+
+      expect(matrix.get(2, 2)).toBe(true);
+    });
+
+    it("マスク条件がfalseなら反転しない", () => {
+      const matrix = new QrMatrix(5);
+
+      matrix.placeDataBit(2, 3, true);
+
+      // mask 0:
+      // (2 + 3) % 2 === 1
+      // → falseなので反転しない
+      applyMask(matrix, 0);
+
+      expect(matrix.get(2, 3)).toBe(true);
+    });
   });
 });
