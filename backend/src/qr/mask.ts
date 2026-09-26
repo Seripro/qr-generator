@@ -1,3 +1,4 @@
+import { calculateMaskPenalty } from "./maskPenalty.js";
 import { QrMatrix } from "./matrix.js";
 
 export function shouldMask(mask: number, row: number, column: number): boolean {
@@ -39,4 +40,38 @@ export function applyMask(matrix: QrMatrix, mask: number): void {
       }
     }
   }
+}
+
+export function chooseBestMask(matrix: QrMatrix): {
+  mask: number;
+  penalty: number;
+  matrix: QrMatrix;
+} {
+  let bestMask = 0;
+  let bestPenalty = Infinity;
+  let bestMatrix: QrMatrix | null = null;
+
+  for (let mask = 0; mask < 8; mask++) {
+    const candidate = matrix.clone();
+
+    applyMask(candidate, mask);
+
+    const penalty = calculateMaskPenalty(candidate);
+
+    if (penalty < bestPenalty) {
+      bestPenalty = penalty;
+      bestMask = mask;
+      bestMatrix = candidate;
+    }
+  }
+
+  if (bestMatrix === null) {
+    throw new Error("Failed to choose mask");
+  }
+
+  return {
+    mask: bestMask,
+    penalty: bestPenalty,
+    matrix: bestMatrix,
+  };
 }

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { applyMask, shouldMask } from "./mask.js";
+import { applyMask, chooseBestMask, shouldMask } from "./mask.js";
 import { QrMatrix } from "./matrix.js";
+import { calculateMaskPenalty } from "./maskPenalty.js";
 
 describe("Mask Pattern", () => {
   it("Mask 0を判定できる", () => {
@@ -57,5 +58,24 @@ describe("Mask Pattern", () => {
 
       expect(matrix.get(2, 3)).toBe(true);
     });
+  });
+});
+
+describe("chooseBestMask", () => {
+  it("0〜7のマスクを評価して最小のものを選ぶ", () => {
+    const matrix = new QrMatrix(21);
+
+    for (let row = 0; row < 21; row++) {
+      for (let column = 0; column < 21; column++) {
+        matrix.placeDataBit(row, column, (row + column) % 2 === 0);
+      }
+    }
+
+    const result = chooseBestMask(matrix);
+
+    expect(result.mask).toBeGreaterThanOrEqual(0);
+    expect(result.mask).toBeLessThanOrEqual(7);
+
+    expect(result.penalty).toBe(calculateMaskPenalty(result.matrix));
   });
 });
