@@ -1,3 +1,5 @@
+import { QrMatrix } from "./matrix.js";
+
 export function calculateFormatInfo(
   errorCorrectionLevel: "L" | "M" | "Q" | "H",
   mask: number,
@@ -24,4 +26,14 @@ export function calculateFormatInfo(
   const formatInfo = ((data << 10) | value) ^ 0b101010000010010;
 
   return formatInfo;
+}
+
+export function placeFormatInfo(
+  matrix: QrMatrix,
+  errorCorrectionLevel: "L" | "M" | "Q" | "H",
+  mask: number,
+): void {
+  const formatInfo = calculateFormatInfo(errorCorrectionLevel, mask);
+
+  matrix.placeFormatInformation(formatInfo);
 }
